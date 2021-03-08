@@ -1,3 +1,12 @@
+<?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require __DIR__ . "/discord.php";
+require __DIR__ . "/functions.php";
+require "cgi-bin/config.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -140,12 +149,18 @@
         </ul>
         <ul class="navbar-nav align-items-lg-center ml-lg-auto">
           <li class="nav-item d-lg-block">
-            <a href="/login" role="button" class="nav-link" id = "discordlogin">
-              <span class="btn-inner--text">
-                <i class="fab fa-discord"></i>
-              </span>
-              <span class="nav-link-inner--icon">Discord Login</span>
-            </a>
+            
+            <?php
+               #$auth_url  = url($client_id, $redirect_url, $scopes);
+               if (isset($_SESSION['user'])) {
+                 $extension = is_animated($_SESSION['user_avatar']);
+                 $avataruurl = "https://cdn.discordapp.com/avatars/" . $_SESSION['user_id'] . "/" . $_SESSION['user_avatar'] . $extension;
+                 echo '<a href="/logout.php" role="button" class="nav-link" id = "discordlogin"><img src = "' . $avataruurl . '" style = "border-radius: 50%; height: 35px; width: 35px;"/>' . "&nbsp;"   . "&nbsp;" . $_SESSION["username"] . "#" . $_SESSION["discrim"]  .'</a>';
+               }
+               else {
+                 echo "<a href='https://discord.com/oauth2/authorize?response_type=code&client_id=805091349883650048&redirect_uri=&scope=identify+guilds&state=d1ca1f7237bf707738b1c229' role='button' class='nav-link' id = 'discordlogin'><span class='btn-inner--text'><i class='fab fa-discord'></i></span><span class='nav-link-inner--icon'>Discord Login</span></a>";
+               }
+            ?>
           </li>
         </ul>
       </div>
